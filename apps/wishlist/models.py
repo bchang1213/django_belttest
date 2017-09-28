@@ -61,5 +61,5 @@ class Item(models.Model):
 
 class Addedby(models.Model):
 	user = models.ForeignKey(User, related_name = "addedby")
-	item = models.ForeignKey(Item, related_name = "itemadded")
+	item = models.ForeignKey(Item, related_name = "item_added")
 

@@ -21,6 +21,7 @@
 			{% endfor %}
 			</ul>
 			{% endif %}
+
 			<div class="wishlist">
 				<p>Your Wish List:</p>
 				<table>
@@ -30,7 +31,7 @@
 						<th>Dated Added</th>
 						<th>Action</th>
 					</tr>
-					{% for item in addedbyitems %}
+					{% for item in items_added_by_user %}
 					<tr>
 						<td><a href="/wish_items/{{ item.item.id }}">{{ item.item.name }}</a></td>
 						<td>{{ item.item.createdby.name }}</td>
@@ -44,6 +45,7 @@
 					</tr>
 					{% endfor %}
 				</table>
+
 				<p>Others Wish List:</p>
 				<table>
 					<tr>
@@ -53,17 +55,15 @@
 						<th>Action</th>
 					</tr>
 
-					{% for aitem in notaddedbyuser %}
-					{% if not aitem.item_id == addedbyitems.item_id %}
+					{% for notwish in notwishlist %}
 					<tr>
-						<td><a href="/wish_items/{{ aitem.item.id }}">{{ aitem.item.name }}</a></td>
-						<td>{{ aitem.item.createdby.name }}</td>
-						<td>{{ aitem.item.created_at }}</td>
+						<td><a href="/wish_items/{{ notwish.item.id }}">{{ notwish.item.name }}</a></td>
+						<td>{{ notwish.item.createdby.name }}</td>
+						<td>{{ notwish.item.created_at }}</td>
 						<td>
-							<a href="/{{aitem.item.id}}/addwish">Add to my Wish List</a>
+							<a href="/{{notwish.item.id}}/addwish">Add to my Wish List</a>
 						</td>
 					</tr>
-					{% endif %}
 					{% endfor %}
 				</table>
 			</div>

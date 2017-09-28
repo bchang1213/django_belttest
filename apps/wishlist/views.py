@@ -51,13 +51,36 @@ def register(request):
 		messages.success(request, 'User created. Please login!')
 		return redirect('/')
 
+
+
+
+
 def dashboard(request):
+	wishlist = []
+	my_added_items = Addedby.objects.filter(user_id = request.session['user'])
+	for my_item in my_added_items:
+		wishlist.append(my_item.item_id)
+	print wishlist
+
+	notwishlist=[]
+	items_not_added_by_user = Addedby.objects.exclude(user_id = request.session['user'])
+	for not_item in items_not_added_by_user:
+		if not_item.item_id not in wishlist:
+			notwishlist.append(not_item)
+	print notwishlist
+
 	context={
 	'user': User.objects.get(id=request.session['user']),
-	'addedbyitems': Addedby.objects.filter(user_id=request.session['user']),
-	'notaddedbyuser': Addedby.objects.exclude(user_id = request.session['user']),
+	'items_added_by_user': Addedby.objects.filter(user_id=request.session['user']),
+	'notwishlist': notwishlist,
 	}
+
 	return render(request, "wishlist/dashboard.html", context)
+
+
+
+
+
 
 def itemform(request):
 	return render(request, "wishlist/itemform.html")
@@ -82,8 +105,7 @@ def addwish(request, item_id):
 	return redirect('/')
 
 def removewish(request, item_id):
-	removeitem = Addedby.objects.filter(item_id=item_id)
-	removeitem.delete()
+	Addedby.objects.get(user_id=request.session['user'], item_id=item_id).delete()
 	return redirect('/')
 
 def delete(request, item_id):
