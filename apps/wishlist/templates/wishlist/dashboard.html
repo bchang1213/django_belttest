@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Wish List</title>
+	{% load static %}
+<!-- The line above tells Django to be ready to listen for static files -->
+	<link rel="stylesheet" href="{% static 'wishlist/css/main.css' %}" media="screen" title="no title"  charset="utf-8">
+<!-- Put the static files in the static folder inside your app.  Django collects files within all static folders and puts them within a single folder --> 
+</head>
+<body>
+	<div class="container">
+		<header>
+			<h3>Hello, {{ user.name }}</h3>
+			<a href="/logout">Log Out</a>
+		</header>
+		<main>
+			{% if messages %}
+			<ul class="messages">
+			{% for message in messages %}
+				<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+			{% endfor %}
+			</ul>
+			{% endif %}
+			<div class="wishlist">
+				<p>Your Wish List:</p>
+				<table>
+					<tr>
+						<th>Item</th>
+						<th>Created By</th>
+						<th>Dated Added</th>
+						<th>Action</th>
+					</tr>
+					{% for item in addedbyitems %}
+					<tr>
+						<td><a href="/wish_items/{{ item.item.id }}">{{ item.item.name }}</a></td>
+						<td>{{ item.item.createdby.name }}</td>
+						<td>{{ item.item.created_at }}</td>
+						<td>
+							{% if request.session.user == item.item.createdby_id %}
+							<a href="/{{item.item.id}}/delete">Delete</a>
+							{% endif %}
+							<a href="/{{item.item.id}}/removewish">Remove from my WishList</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+				<p>Others Wish List:</p>
+				<table>
+					<tr>
+						<th>Item</th>
+						<th>Added By</th>
+						<th>Dated Added</th>
+						<th>Action</th>
+					</tr>
+
+					{% for aitem in notaddedbyuser %}
+					{% if not aitem.item_id == addedbyitems.item_id %}
+					<tr>
+						<td><a href="/wish_items/{{ aitem.item.id }}">{{ aitem.item.name }}</a></td>
+						<td>{{ aitem.item.createdby.name }}</td>
+						<td>{{ aitem.item.created_at }}</td>
+						<td>
+							<a href="/{{aitem.item.id}}/addwish">Add to my Wish List</a>
+						</td>
+					</tr>
+					{% endif %}
+					{% endfor %}
+				</table>
+			</div>
+			<a href="/wish_items/create">Add Item</a>
+		</main>
+	</div>
+</body>
+</html>
