@@ -77,7 +77,21 @@ def dashboard(request):
 
 	return render(request, "wishlist/dashboard.html", context)
 
+#SAndys code
+# all_peeps = User.objects.exclude(id=request.session['user_id'])
 
+# my_friends = user.friends.all()
+
+# friends_table = []
+
+# for friends in my_friends:
+#     friends_table.append(friends.id)
+
+# not_friend = []
+
+# for person in all_peeps:
+#     if person.id not in friends_table:
+#         not_friend.append(person)
 
 
 
